@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎤</text></svg>">
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        header {
+            background-color: #f4f4f4;
+            padding: 1em;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        main {
+            position: relative;
+            height: 100%;
+        }
+
+        .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 1em 2em;
+            font-size: 2em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .prompter {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 20%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 2em;
+            text-align: center;
+            padding-top: 1em;
+        }
+
+        #running-line {
+            position: relative;
+            margin: auto;
+            padding: 0 1em;
+            width: fit-content;
+        }
+
+        #microphone {
+            position: fixed;
+            bottom: 4em;
+            right: 4em;
+        }
+
+        #microphone button {
+            padding: 1em;
+            border-radius: 50%;
+        }
+
+        #microphone button:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="speachkit.js"></script>
+    <script src="dynamicMedia.js"></script>
+    <script src="api.js"></script>
+</head>
+
+
+<body>
+    <header >
+        <nav >
+            <ul class="flex justify-around opacity-75">
+                <li class="mr-4"><a class="text-blue-500" href="#">Тоня</a></li>
+                <li class="mr-4"><a class="text-blue-500" href="#">Тоня</a></li>
+                <li class="mr-4"><a class="text-blue-500" href="#">Тоня</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="relative h-screen w-screen bg-gray-100 flex justify-center items-center">
+        <div id="frame">
+            <video id="video" class="frame" src="https://storage.yandexcloud.net/3d-avatar/696.mp4" autoplay></video>
+        </div>
+        <div class="absolute bottom-0 w-full h-20 bg-black bg-opacity-50 text-white text-2xl text-center">
+            <h2 id="running-line">
+                ...
+            </h2>
+        </div>
+    </main>
+
+    <div id="microphone">
+        <button id="start">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="48px" height="48px">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" />
+            </svg>
+        </button>
+    </div>
+
+
+    <script>
+        let tid;
+        const sk = new SpeechKit({});
+
+        const videoElement = document.getElementById('video');
+        videoElement.volume = 0.5;
+
+        const interim = document.getElementById('running-line');
+        const start = document.getElementById('start');
+
+        sk.isMicrophoneAvailable();
+
+        start.addEventListener('click', () => {
+            sk.start();
+        });
+
+        sk.addEventListener('interim', (res) => interim.textContent = res.detail);
+
+        let time = 100;
+
+        sk.addEventListener('result', async (res) => {
+            interim.textContent = res.detail;
+            const textToAudio = await gpt(res.detail, 'ru_RU');
+            const audioUrl = await ttsApi(textToAudio, sk.id);
+            const {url, order} = await generateVideo(sk.id, audioUrl.url, 0);
+
+            time = 100;
+            td = setInterval(async () => {
+                const is_done = await checkStatus(`${sk.id}.mp4`);
+                interim.textContent = `Processing... ${time--}`;
+                if (is_done) {
+                    clearInterval(td);
+                    videoElement.src = url;
+                    videoElement.play();
+                }
+            }, 5000);
+
+            dm.setMedia(audioUrl.url);
+            dm.play();
+        });
+
+
+    </script>
+</body>
+
+</html>

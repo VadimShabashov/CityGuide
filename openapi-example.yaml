@@ -1,0 +1,70 @@
+openapi: 3.0.0
+info:
+  title: Hackathon API
+  version: 1.0.0
+
+servers:
+- url: https://d5dm5nc7bsaiu4esnh84.apigw.yandexcloud.net
+x-yc-apigateway:
+  cors:
+    origin: '*'
+    methods: '*'
+    allowedHeaders: '*'
+
+paths:
+  /tts:
+    post:
+      x-yc-apigateway-integration:
+        type: cloud-functions
+        function_id: d4eb1o1flih46b81uplq
+      operationId: tts-function
+
+  /gpt:
+    post:
+      x-yc-apigateway-integration:
+        type: cloud-functions
+        function_id: d4epkt3ljiecj2uooj09
+      operationId: gpt-function
+  
+  /gigachat:
+    post:
+      x-yc-apigateway-integration:
+        type: cloud-functions
+        function_id: d4ek9s5u2n4olpl446mv
+      operationId: giga-function
+
+  /exs:
+    get:
+      x-yc-apigateway-integration:
+        type: cloud-functions
+        function_id: d4eusgcqvijiknq53a8i
+      operationId: fe-function
+
+  /avatar:
+    x-yc-apigateway-any-method:
+      x-yc-apigateway-integration:
+        type: http
+        url: http://62.68.147.61:8000/
+        headers:
+          Content-Type: '{Content-Type}'
+        query:
+          param: '{param}'
+        timeouts:
+          connect: 0.5
+          read: 5
+      parameters:
+      - name: Content-Type
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: path
+        in: path
+        required: false
+        schema:
+          type: string
+      - name: param
+        in: query
+        required: false
+        schema:
+          type: string
