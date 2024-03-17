@@ -31,19 +31,6 @@ def get_bearer_token():
 
 def get_prompt(lang):
     if lang == "ru_RU":
-        return "Представь, что ты ассистент, помогающий туристам и горожанам узнавать о культурных \
-                достопримечательностях, истории города и ориентироваться в городе. Ответь на их вопросы \
-                как можно более кратко, с минимальным числом слов."
-    elif lang == "en_EN":
-        return "Imagine that you are an assistant helping tourists and citizens to learn about cultural \
-                attractions, the history of the city and navigate the city. Answer their questions as briefly as possible and \
-                with as few words as possible."
-    else:
-        return ""
-
-
-def get_prompt(lang):
-    if lang == "ru_RU":
         return "Ответь на вопросы rак можно более кратко и с минимальным числом слов."
     elif lang == "en_EN":
         return "Answer questions as briefly as possible and with as few words as possible."
