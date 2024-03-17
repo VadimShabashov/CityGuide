@@ -25,13 +25,15 @@ def get_bearer_token():
     }
 
     response = requests.request("POST", URL_GET_TOKEN, headers=headers, data=payload, verify=False)
+    
+    print(response)
 
     return response.json()["access_token"]
 
 
 def get_prompt(lang):
     if lang == "ru_RU":
-        return "Ответь на вопросы rак можно более кратко и с минимальным числом слов."
+        return "Ответь на вопросы как можно более кратко и с минимальным числом слов."
     elif lang == "en_EN":
         return "Answer questions as briefly as possible and with as few words as possible."
     else:
@@ -84,7 +86,7 @@ def handler(event, context):
         body = json.loads(event['body'])
         
         # Check if required fields are present in the request body
-        required_fields = ['text']
+        required_fields = ['text', 'lang']
         
         for field in required_fields:
             if field not in body:
