@@ -3,6 +3,11 @@ import os
 import json
 import uuid
 
+from flask import Flask, request
+
+
+app = Flask(__name__)
+
 
 CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
 
@@ -25,13 +30,15 @@ def get_bearer_token():
     }
 
     response = requests.request("POST", URL_GET_TOKEN, headers=headers, data=payload, verify=False)
+    
+    print(response)
 
     return response.json()["access_token"]
 
 
 def get_prompt(lang):
     if lang == "ru_RU":
-        return "Ответь на вопросы как можно более кратко и с минимальным числом слов."
+        return "Ответь на вопросы rак можно более кратко и с минимальным числом слов."
     elif lang == "en_EN":
         return "Answer questions as briefly as possible and with as few words as possible."
     else:
@@ -67,46 +74,45 @@ def get_chat_answer(user_text, prompt, bearer_token):
     }
 
     response = requests.request("POST", URL_CHAT, headers=headers, data=payload, verify=False)
+    
+    print(response)
 
     return response.json()["choices"][0]["message"]["content"]
 
 
-def handler(event, context):
-    try:
-        # Check if request method is POST
-        if event['httpMethod'] != 'POST':
+# bearer_token = get_bearer_token()
+# prompt = get_prompt('ru_RU')
+# answer = get_chat_answer("Как дела?", prompt, bearer_token)
+# print(answer)
+
+
+@app.route('/update', methods=['POST'])
+def update_data():
+    body = request.get_json()
+    print(body)
+    
+    # Check if required fields are present in the request body
+    required_fields = ['text', 'lang']
+    
+    for field in required_fields:
+        if field not in body:
             return {
                 'statusCode': 400,
-                'body': 'Only a POST request with `Content-Type: application/json` is supported',
+                'body': f'Missing required field: {field}',
             }
-        
-        # Parse JSON from request body
-        body = json.loads(event['body'])
-        
-        # Check if required fields are present in the request body
-        required_fields = ['text', 'lang']
-        
-        for field in required_fields:
-            if field not in body:
-                return {
-                    'statusCode': 400,
-                    'body': f'Missing required field: {field}',
-                }
-        
-        text = body['text']
-        lang = body['lang']
-        
-        bearer_token = get_bearer_token()
-        prompt = get_prompt(lang)
-        answer = get_chat_answer(text, prompt, bearer_token)
-        
-        return {
-            'statusCode': 200,
-            'body': answer,
-        }
-    except Exception as e:
-        print(e)
-        return {
-            'statusCode': 500,
-            'body': str(e),
-        }
+    
+    text = body['text']
+    lang = body['lang']
+    
+    bearer_token = get_bearer_token()
+    prompt = get_prompt(lang)
+    answer = get_chat_answer(text, prompt, bearer_token)
+    
+    return {
+        'statusCode': 200,
+        'body': answer,
+    }
+
+
+if __name__ == '__main__':
+    app.run(debug=True, host="0.0.0.0")
