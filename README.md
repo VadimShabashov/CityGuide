@@ -16,24 +16,19 @@
 
 Также подробности можно найти в нашей [презентации](presentation.pdf).
 
-
-# Пример результата
-
-![Пример](result.mp4)
+Пример результата: [](https://drive.google.com/file/d/1BTqY3Tc9OZEplMusiilhykBEDd11Cvab/view?usp=sharing)
 
 # Аватары
 
 Аватар - анимированный персонаж, который с помощью голосовой озвучки способен отвечать на запрос пользователя. В рамках нашего проекта мы постарались поддержать различных аватаров, которых сгенерировали при помощи нейросети [Kandinsky v3](https://github.com/ai-forever/Kandinsky-3). 
 
 
-<img src="avatars/0.png" width=22% height=22%>
-
-<img src="avatars/1.png" width=22% height=22%>
-
-<img src="avatars/2.png" width=22% height=22%>
-
-<img src="avatars/3.png" width=22% height=22%>
-
+<p float="left">
+	<img src="avatars/0.png" width=22% height=22%>
+	<img src="avatars/1.png" width=22% height=22%>
+	<img src="avatars/2.png" width=22% height=22%>
+	<img src="avatars/3.png" width=22% height=22%>
+</p>
 
 
 Статичные изображения можно анимировать под аудио голоса с помощью ML моделей, которые решают задачи Talking Head Animation и Lip Sync.
