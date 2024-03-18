@@ -16,7 +16,7 @@
 
 Также подробности можно найти в нашей [презентации](presentation.pdf).
 
-Пример результата: [](https://drive.google.com/file/d/1BTqY3Tc9OZEplMusiilhykBEDd11Cvab/view?usp=sharing)
+Пример [результата](https://drive.google.com/file/d/1BTqY3Tc9OZEplMusiilhykBEDd11Cvab/view?usp=sharing).
 
 # Аватары
 
@@ -66,8 +66,7 @@
 
 Ниже изображена схема решения:
 
-
-![+ Flowchart - Frame 1 (3)](scheme.png)
+![схема](scheme.jpg)
 
 Для начала пользователю предоставляется выбор аватара для взаимодействия. Далее он может обращаться к нему голосом, который через веб-браузер и Web Speech API преобразуется в текст. Текст предобрабатывается и подается на вход вместе с системным промптом большой языковой модели - [GigaChat](https://developers.sber.ru/gigachat/login). При необходимости добавляется промпт для перевода на английский язык. После чего сгенрированный ответ LLM с помощью [Yandex SpeechKit](https://cloud.yandex.com/en/services/speechkit) преобразуется в аудио WAV файл. Для хранения медиа файлов используется облачное хранилище S3.
 
