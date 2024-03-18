@@ -13,19 +13,26 @@
 *  Говорить на английском языке и помогать не только горожанам, но и туристам
 *  При необходимости снабжать свой ответ субтитрами для людей с проблемами со слухом
 
+
+Также подробности можно найти в нашей [презентации](presentation.pdf).
+
+
+# Пример результата
+
+![Пример](result.mp4)
+
 # Аватары
 
 Аватар - анимированный персонаж, который с помощью голосовой озвучки способен отвечать на запрос пользователя. В рамках нашего проекта мы постарались поддержать различных аватаров, которых сгенерировали при помощи нейросети [Kandinsky v3](https://github.com/ai-forever/Kandinsky-3). 
 
 
-<img src="https://github.com/inspired99/CityGuide/assets/64794482/94701f41-53f3-4f78-ac36-6277bece304f" width=22% height=22%>
+<img src="avatars/0.png" width=22% height=22%>
 
-<img src="https://github.com/inspired99/CityGuide/assets/64794482/e8edde01-466e-44e3-9363-26184efb41bf" width=22% height=22%>
+<img src="avatars/1.png" width=22% height=22%>
 
-<img src="https://github.com/inspired99/CityGuide/assets/64794482/85ca85ed-ffe5-43af-8b3b-07f70275ee89" width=22% height=22%>
+<img src="avatars/2.png" width=22% height=22%>
 
-
-<img src="https://github.com/inspired99/CityGuide/assets/64794482/052aac6c-bcdc-48c7-ac25-97d677be5e50" width=22% height=22%>
+<img src="avatars/3.png" width=22% height=22%>
 
 
 
@@ -65,7 +72,7 @@
 Ниже изображена схема решения:
 
 
-![+ Flowchart - Frame 1 (3)](https://github.com/inspired99/CityGuide/assets/64794482/8b119fbb-f229-4130-a01b-fca210412299)
+![+ Flowchart - Frame 1 (3)](scheme.png)
 
 Для начала пользователю предоставляется выбор аватара для взаимодействия. Далее он может обращаться к нему голосом, который через веб-браузер и Web Speech API преобразуется в текст. Текст предобрабатывается и подается на вход вместе с системным промптом большой языковой модели - [GigaChat](https://developers.sber.ru/gigachat/login). При необходимости добавляется промпт для перевода на английский язык. После чего сгенрированный ответ LLM с помощью [Yandex SpeechKit](https://cloud.yandex.com/en/services/speechkit) преобразуется в аудио WAV файл. Для хранения медиа файлов используется облачное хранилище S3.
 
@@ -78,7 +85,6 @@
 Сайт решения - https://site-hack-2024.website.yandexcloud.net/. Из-за множества запросов и все же не online взаимодействия (генерация 1 секунды в среднем занимает около 8-10 секунд на сервере) ответ может задерживаться. 
 
 Для того чтобы развернуть сайт понадобится Yandex Cloud и добавление cloud functions, которые выполняются на Python. Сайт обменивается запросами с YandexGPT по API и также с удаленным сервером с GPU, на котором развернута ML модель для анимации аватаров для ускорения ее работы.
-
 
 
 # Команда
